@@ -1,4 +1,4 @@
-package com.snapperbay4453.jsonfeed;
+package com.snapperbay4453.jsonfeed.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
