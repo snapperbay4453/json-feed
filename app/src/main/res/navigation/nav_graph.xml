@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/feedListFragment">
+
+    <fragment
+        android:id="@+id/feedListFragment"
+        android:name="com.snapperbay4453.jsonfeed.fragments.FeedListFragment"
+        android:label="fragment_feed_list"
+        tools:layout="@layout/fragment_feed_list" >
+        <action
+            android:id="@+id/action_feedListFragment_to_createFeedFragment"
+            app:destination="@id/createFeedFragment"
+            app:argType="Integer" />
+        <action
+            android:id="@+id/action_feedListFragment_to_editFeedFragment"
+            app:destination="@id/editFeedFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createFeedFragment"
+        android:name="com.snapperbay4453.jsonfeed.fragments.CreateFeedFragment"
+        android:label="fragment_feed_setter"
+        tools:layout="@layout/fragment_create_feed" />
+    <fragment
+        android:id="@+id/editFeedFragment"
+        android:name="com.snapperbay4453.jsonfeed.fragments.EditFeedFragment"
+        android:label="EditFeedFragment" >
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
+</navigation>
