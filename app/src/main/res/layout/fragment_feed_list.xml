@@ -27,11 +27,11 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fragment_feed_list_create_feed_fab"
+        android:id="@+id/fragment_feed_list_refresh_all_feeds_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:src="@drawable/ic_launcher_background"
+        android:src="@drawable/ic_launcher_foreground"
         android:contentDescription="Create feed"
         android:layout_margin="16dp" />
 
