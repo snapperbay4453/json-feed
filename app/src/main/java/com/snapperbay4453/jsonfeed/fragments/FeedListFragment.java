@@ -30,7 +30,7 @@ public class FeedListFragment extends Fragment {
     private FragmentFeedListBinding binding;
     private FeedViewModel feedViewModel;
     private FeedListAdapter feedListAdapter;
-    private Handler handler = new Handler();
+    private Handler handler;
     private RecyclerView feedRecyclerView;
     private FloatingActionButton createFab;
 
@@ -41,6 +41,9 @@ public class FeedListFragment extends Fragment {
         binding = FragmentFeedListBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
         Context context = container.getContext();
+        feedViewModel = new ViewModelProvider(this).get(FeedViewModel.class);
+        feedListAdapter = new FeedListAdapter(feedViewModel);
+        handler = new Handler();
         feedRecyclerView = binding.fragmentFeedListFeedRecyclerView;
         createFab = binding.fragmentFeedListCreateFeedFab;
 
@@ -56,24 +59,12 @@ public class FeedListFragment extends Fragment {
             }
         });
 
-        feedListAdapter = new FeedListAdapter();
-        feedViewModel = new ViewModelProvider(this).get(FeedViewModel.class);
-        feedViewModel.nuke();
-
         feedViewModel.getAll().observe(getViewLifecycleOwner(), new Observer<List<Feed>>() {
             @Override
             public void onChanged(List<Feed> feeds) {
                 feedListAdapter.submitList(feeds);
             }
         });
-
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                feedViewModel.save(new Feed("Test1Name", "Test1Url", "Test1Description"));
-                feedViewModel.save(new Feed("Test2Name", "Test2Url", "Test2Description"));
-            }
-        }, 5000);
 
         feedRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         feedRecyclerView.setHasFixedSize(true);

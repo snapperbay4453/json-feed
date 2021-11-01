@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/feedListFragment"
         android:name="com.snapperbay4453.jsonfeed.fragments.FeedListFragment"
-        android:label="fragment_feed_list"
+        android:label="FeedListFragment"
         tools:layout="@layout/fragment_feed_list" >
         <action
             android:id="@+id/action_feedListFragment_to_createFeedFragment"
@@ -21,7 +21,7 @@
     <fragment
         android:id="@+id/createFeedFragment"
         android:name="com.snapperbay4453.jsonfeed.fragments.CreateFeedFragment"
-        android:label="fragment_feed_setter"
+        android:label="CreateFeedFragment"
         tools:layout="@layout/fragment_create_feed" />
     <fragment
         android:id="@+id/editFeedFragment"
