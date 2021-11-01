@@ -7,10 +7,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.snapperbay4453.jsonfeed.databinding.FragmentCreateFeedBinding;
 import com.snapperbay4453.jsonfeed.models.Feed;
@@ -21,7 +23,23 @@ public class CreateFeedFragment extends Fragment {
     private FragmentCreateFeedBinding binding;
     private View view;
     private FeedViewModel feedViewModel;
+    private EditText nameInput;
+    private EditText urlInput;
+    private EditText descriptionInput;
     private Button submitButton;
+
+    private boolean validateInputs() {
+        boolean isValid = true;
+        if(TextUtils.isEmpty(nameInput.getText())) {
+            nameInput.setError("This field is required.");
+            isValid = false;
+        }
+        if(TextUtils.isEmpty(urlInput.getText())) {
+            urlInput.setError("This field is required.");
+            isValid = false;
+        }
+        return isValid;
+    }
 
     @Override
     public View onCreateView (LayoutInflater inflater,
@@ -30,13 +48,18 @@ public class CreateFeedFragment extends Fragment {
         binding = FragmentCreateFeedBinding.inflate(inflater, container, false);
         view = binding.getRoot();
         feedViewModel = new ViewModelProvider(this).get(FeedViewModel.class);
+        nameInput = binding.fragmentCreateFeedNameInput;
+        urlInput = binding.fragmentCreateFeedUrlInput;
+        descriptionInput = binding.fragmentCreateFeedDescriptionInput;
         submitButton = binding.fragmentCreateFeedSubmitButton;
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                feedViewModel.save(new Feed("New Name", "New URL", "New Description"));
-                NavController navController = Navigation.findNavController(view);
-                navController.popBackStack();
+                if (validateInputs()) {
+                    feedViewModel.save(new Feed(nameInput.getText().toString(), urlInput.getText().toString(), descriptionInput.getText().toString()));
+                    NavController navController = Navigation.findNavController(view);
+                    navController.popBackStack();
+                }
             }
         });
 

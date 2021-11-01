@@ -53,12 +53,6 @@ public class FeedListFragment extends Fragment {
             }
         });
 
-        createFab.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_feedListFragment_to_createFeedFragment);
-            }
-        });
-
         feedViewModel.getAll().observe(getViewLifecycleOwner(), new Observer<List<Feed>>() {
             @Override
             public void onChanged(List<Feed> feeds) {
