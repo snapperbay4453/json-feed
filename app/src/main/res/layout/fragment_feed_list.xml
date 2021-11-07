@@ -14,8 +14,10 @@
             android:id="@+id/fragment_feed_list_toolbar"
             android:layout_height="?attr/actionBarSize"
             android:layout_width="match_parent"
+            android:background="?attr/colorPrimary"
+            app:titleTextColor="@android:color/white"
             app:layout_constraintTop_toTopOf="parent"
-            app:title="Home" />
+            app:title="@string/app_name" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/fragment_feed_list_feed_recycler_view"
@@ -27,12 +29,12 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fragment_feed_list_refresh_all_feeds_fab"
+        android:id="@+id/fragment_feed_list_toggle_service_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:src="@drawable/ic_launcher_foreground"
-        android:contentDescription="Create feed"
+        android:src="@drawable/ic_baseline_play_arrow_24"
+        android:contentDescription="@string/start_or_pause_refreshing"
         android:layout_margin="16dp" />
 
 </FrameLayout>

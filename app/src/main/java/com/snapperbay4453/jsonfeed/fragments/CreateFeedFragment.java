@@ -58,7 +58,7 @@ public class CreateFeedFragment extends Fragment {
         descriptionInput = binding.fragmentCreateFeedDescriptionInput;
         submitButton = binding.fragmentCreateFeedSubmitButton;
 
-        toolbar.setNavigationIcon(R.drawable.ic_launcher_foreground);
+        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

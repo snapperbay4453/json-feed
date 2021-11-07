@@ -3,7 +3,6 @@ package com.snapperbay4453.jsonfeed.fragments;
 import android.content.Context;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -15,9 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -60,7 +56,7 @@ public class FeedListFragment extends Fragment {
 
         toolbar = binding.fragmentFeedListToolbar;
         feedRecyclerView = binding.fragmentFeedListFeedRecyclerView;
-        refreshAllFeedsFab = binding.fragmentFeedListRefreshAllFeedsFab;
+        refreshAllFeedsFab = binding.fragmentFeedListToggleServiceFab;
 
         toolbar.inflateMenu(R.menu.fragment_feed_list_menu);
         toolbar.setOnMenuItemClickListener(item -> {

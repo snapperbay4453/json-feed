@@ -14,8 +14,10 @@
             android:id="@+id/fragment_create_feed_toolbar"
             android:layout_height="?attr/actionBarSize"
             android:layout_width="match_parent"
+            android:background="?attr/colorPrimary"
+            app:titleTextColor="@android:color/white"
             app:layout_constraintTop_toTopOf="parent"
-            app:title="Create feed" />
+            app:title="@string/create_new_feed" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/fragment_create_feed_essential_group"
@@ -29,7 +31,7 @@
                     android:id="@+id/fragment_create_feed_essential_group_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Essential"
+                    android:text="@string/essential_information"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toTopOf="@+id/fragment_create_feed_name_input" >
                 </TextView>
@@ -40,14 +42,14 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@+id/fragment_create_feed_essential_group_title"
                     app:layout_constraintBottom_toTopOf="@+id/fragment_create_feed_url_input"
-                    android:hint="Name"/>
+                    android:hint="@string/name"/>
 
                 <EditText
                     android:id="@+id/fragment_create_feed_url_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@+id/fragment_create_feed_name_input"
-                    android:hint="URL"/>
+                    android:hint="@string/url"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -62,7 +64,7 @@
                 android:id="@+id/fragment_create_feed_additional_group_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Additional"
+                android:text="@string/additional_information"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/fragment_create_feed_description_input" >
             </TextView>
@@ -72,7 +74,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/fragment_create_feed_additional_group_title"
-                android:hint="Description"/>
+                android:hint="@string/description" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -81,7 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:text="Create"
+            android:text="@string/create"
             android:layout_margin="16dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
