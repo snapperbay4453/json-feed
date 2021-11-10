@@ -17,6 +17,9 @@
         <action
             android:id="@+id/action_feedListFragment_to_editFeedFragment"
             app:destination="@id/editFeedFragment" />
+        <action
+            android:id="@+id/action_feedListFragment_to_preferencesFragment"
+            app:destination="@id/preferencesFragment" />
     </fragment>
     <fragment
         android:id="@+id/createFeedFragment"
@@ -31,4 +34,10 @@
             android:name="id"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/preferencesFragment"
+        android:name="com.snapperbay4453.jsonfeed.fragments.PreferencesFragment"
+        android:label="fragment_preferences"
+        tools:layout="@layout/fragment_preferences" />
+
 </navigation>

@@ -11,4 +11,5 @@
     <string name="additional_information">추가 정보</string>
     <string name="description">설명</string>
     <string name="create">생성하기</string>
+    <string name="preferences">환경설정</string>
 </resources>

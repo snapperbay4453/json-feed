@@ -1,6 +1,8 @@
 package com.snapperbay4453.jsonfeed.fragments;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
@@ -16,12 +18,14 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.snapperbay4453.jsonfeed.R;
 import com.snapperbay4453.jsonfeed.adapters.FeedListAdapter;
 import com.snapperbay4453.jsonfeed.databinding.FragmentFeedListBinding;
 import com.snapperbay4453.jsonfeed.models.Feed;
+import com.snapperbay4453.jsonfeed.services.BackgroundService;
 import com.snapperbay4453.jsonfeed.viewmodels.FeedViewModel;
 
 import java.util.List;
@@ -30,9 +34,12 @@ public class FeedListFragment extends Fragment {
 
     private FragmentFeedListBinding binding;
     private View view;
+    private Context context;
     private FeedViewModel feedViewModel;
     private FeedListAdapter feedListAdapter;
     private Handler handler;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor sharedPreferencesEditor;
     private Toolbar toolbar;
     private RecyclerView feedRecyclerView;
     private FloatingActionButton refreshAllFeedsFab;
@@ -49,10 +56,12 @@ public class FeedListFragment extends Fragment {
                               Bundle savedInstanceState) {
         binding = FragmentFeedListBinding.inflate(inflater, container, false);
         view = binding.getRoot();
-        Context context = container.getContext();
+        context = container.getContext();
         feedViewModel = new ViewModelProvider(this).get(FeedViewModel.class);
         feedListAdapter = new FeedListAdapter(feedViewModel);
         handler = new Handler();
+        sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        sharedPreferencesEditor = sharedPreferences.edit();
 
         toolbar = binding.fragmentFeedListToolbar;
         feedRecyclerView = binding.fragmentFeedListFeedRecyclerView;
@@ -65,8 +74,15 @@ public class FeedListFragment extends Fragment {
                     Navigation.findNavController(view).navigate(R.id.action_feedListFragment_to_createFeedFragment);
                     return true;
                 }
-                case R.id.fragment_feed_list_action_reset: {
+                case R.id.fragment_feed_list_action_refresh:  {
+                    return true;
+                }
+                case R.id.fragment_feed_list_action_nuke: {
                     feedViewModel.nuke();
+                    return true;
+                }
+                case R.id.fragment_feed_list_action_preferences:  {
+                    Navigation.findNavController(view).navigate(R.id.action_feedListFragment_to_preferencesFragment);
                     return true;
                 }
                 default:
@@ -76,7 +92,9 @@ public class FeedListFragment extends Fragment {
 
         refreshAllFeedsFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-
+                Intent intent = new Intent(context, BackgroundService.class);
+                intent.putExtra("command", "toggle_background_service");
+                context.startService(intent);
             }
         });
 

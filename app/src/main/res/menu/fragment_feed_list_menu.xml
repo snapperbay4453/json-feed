@@ -24,8 +24,12 @@
         <menu>
 
             <item
-                android:id="@+id/fragment_feed_list_action_reset"
-                android:icon="@drawable/ic_baseline_error_24"
+                android:id="@+id/fragment_feed_list_action_preferences"
+                android:title="@string/preferences"
+                app:showAsAction="ifRoom|withText"/>
+
+            <item
+                android:id="@+id/fragment_feed_list_action_nuke"
                 android:title="@string/delete_all_feeds"
                 app:showAsAction="ifRoom|withText"/>
 
