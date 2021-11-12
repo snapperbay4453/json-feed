@@ -70,7 +70,7 @@ public class CreateFeedFragment extends Fragment {
         submitButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 if (validateInputs()) {
-                    feedViewModel.save(new Feed(nameInput.getText().toString(), urlInput.getText().toString(), descriptionInput.getText().toString()));
+                    feedViewModel.insert(new Feed(nameInput.getText().toString(), urlInput.getText().toString(), descriptionInput.getText().toString()));
                     NavController navController = Navigation.findNavController(view);
                     navController.popBackStack();
                 }

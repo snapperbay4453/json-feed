@@ -78,7 +78,7 @@ public class FeedListFragment extends Fragment {
                     return true;
                 }
                 case R.id.fragment_feed_list_action_nuke: {
-                    feedViewModel.nuke();
+                    feedViewModel.deleteAll();
                     return true;
                 }
                 case R.id.fragment_feed_list_action_preferences:  {
@@ -98,7 +98,7 @@ public class FeedListFragment extends Fragment {
             }
         });
 
-        feedViewModel.getAll().observe(getViewLifecycleOwner(), new Observer<List<Feed>>() {
+        feedViewModel.selectAll().observe(getViewLifecycleOwner(), new Observer<List<Feed>>() {
             @Override
             public void onChanged(List<Feed> feeds) {
                 feedListAdapter.submitList(feeds);

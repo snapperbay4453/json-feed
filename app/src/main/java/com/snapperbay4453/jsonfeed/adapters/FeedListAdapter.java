@@ -44,9 +44,10 @@ public class FeedListAdapter extends ListAdapter<Feed, FeedListAdapter.ViewHolde
                 @Override
                 public void onClick(View v)
                 {
-                    feedViewModel.remove(feed);
+                    feedViewModel.delete(feed);
                 }
             });
+            binding.itemFeedListDataTextView.setText(feed.getData() == null ? "" : feed.getData());
         }
     }
 

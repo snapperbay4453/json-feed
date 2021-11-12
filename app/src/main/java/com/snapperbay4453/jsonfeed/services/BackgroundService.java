@@ -10,6 +10,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -17,35 +18,52 @@ import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.snapperbay4453.jsonfeed.activities.MainActivity;
+import com.snapperbay4453.jsonfeed.databases.LocalDatabase;
+import com.snapperbay4453.jsonfeed.models.Feed;
+import com.snapperbay4453.jsonfeed.models.FeedDao;
+import com.snapperbay4453.jsonfeed.repositories.FeedRepository;
+import com.snapperbay4453.jsonfeed.viewmodels.FeedViewModel;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 public class BackgroundService extends Service {
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor sharedPreferencesEditor;
     private Handler handler;
-    private BackgroundNotificationServiceThread backgroundNotificationServiceThread;
-    private Notification notification;
-    private String notificationChannelId = "JSON_FEED_BACKGROUND_SERVICE";
-    private int notificationId = 1;
-
-    public BackgroundService() {
-    }
+    private BackgroundServiceThread backgroundServiceThread;
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    private class BackgroundNotificationServiceThread extends Thread {
+    private class BackgroundServiceThread extends Thread {
         boolean isRun = true;
+        private Notification notification;
+        private String notificationChannelId = "JSON_FEED_BACKGROUND_SERVICE";
+        private int notificationId = 1;
+        private FeedRepository feedRepository = new FeedRepository(getApplication());
+        private List<Feed> feeds = feedRepository.selectAllSync();
+
         public void stopForever() {
             synchronized (this) {
                 NotificationManager notificationManager = getSystemService(NotificationManager.class);
                 notificationManager.cancel(notificationId);
                 this.isRun = false;
+            }
+        }
+        private void fetchFromUrls() {
+            for(Feed feed: feeds) {
+                feed.setData(new Date().toString());
+                feedRepository.update(feed);
             }
         }
         private void createNotificationChannel() {
@@ -60,7 +78,7 @@ public class BackgroundService extends Service {
                 notificationManager.createNotificationChannel(channel);
             }
         }
-        public void createNotification() {
+        private void createNotification() {
             Context backgroundServiceContext = BackgroundService.this;
             Intent mainIntent = new Intent(backgroundServiceContext, MainActivity.class);
             mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -83,6 +101,7 @@ public class BackgroundService extends Service {
         public void run() {
             createNotificationChannel();
             while (isRun) {
+                fetchFromUrls();
                 createNotification();
                 try {
                     Thread.sleep( 1000 );
@@ -105,10 +124,7 @@ public class BackgroundService extends Service {
     }
 
     private void initializeSharedPreferences() {
-        boolean isExist = sharedPreferences.contains("background_service_status");
-        if(!isExist) {
-            sharedPreferencesEditor.putBoolean("background_service_status", false);
-        }
+        sharedPreferencesEditor.putBoolean("background_service_status", false);
         sharedPreferencesEditor.commit();
         handler.post(new ToastRunnable("Background service initialized sharedPreferences."));
     }
@@ -120,11 +136,11 @@ public class BackgroundService extends Service {
         handler.post(new ToastRunnable(String.valueOf(sharedPreferences.getBoolean("background_service_status", false))));
 
         if(!backgroundServiceStatus) {
-            backgroundNotificationServiceThread = new BackgroundNotificationServiceThread();
-            backgroundNotificationServiceThread.start();
+            backgroundServiceThread = new BackgroundServiceThread();
+            backgroundServiceThread.start();
         } else {
-            backgroundNotificationServiceThread.stopForever();
-            backgroundNotificationServiceThread = null;
+            backgroundServiceThread.stopForever();
+            backgroundServiceThread = null;
         }
     }
 
