@@ -6,12 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.NavOptions;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.snapperbay4453.jsonfeed.R;
-import com.snapperbay4453.jsonfeed.databases.LocalDatabase;
 import com.snapperbay4453.jsonfeed.databinding.ItemFeedListBinding;
+import com.snapperbay4453.jsonfeed.fragments.FeedListFragmentDirections;
 import com.snapperbay4453.jsonfeed.models.Feed;
 import com.snapperbay4453.jsonfeed.viewmodels.FeedViewModel;
 
@@ -22,10 +24,12 @@ public class FeedListAdapter extends ListAdapter<Feed, FeedListAdapter.ViewHolde
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ItemFeedListBinding binding;
+        private View view;
         private Feed feed;
 
         public ViewHolder(View view) {
             super(view);
+            this.view = view;
             binding = ItemFeedListBinding.bind(view);
 
             view.setOnLongClickListener(new View.OnLongClickListener() {
@@ -39,12 +43,11 @@ public class FeedListAdapter extends ListAdapter<Feed, FeedListAdapter.ViewHolde
         void onBind(Feed feed) {
             this.feed = feed;
             binding.itemFeedListNameTextView.setText(feed.getName());
-            binding.itemFeedListNameTextView.setOnClickListener(new View.OnClickListener()
-            {
+            binding.itemFeedListWrap.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
-                    feedViewModel.delete(feed);
+                public void onClick(View v) {
+                    int id = feed.getId();
+                    Navigation.findNavController(view).navigate(FeedListFragmentDirections.actionFeedListFragmentToEditFeedFragment(id));
                 }
             });
             binding.itemFeedListDataTextView.setText(feed.getData() == null ? "" : feed.getData());

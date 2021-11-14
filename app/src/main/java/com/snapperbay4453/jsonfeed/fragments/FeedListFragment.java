@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -44,6 +45,7 @@ public class FeedListFragment extends Fragment {
     private Intent mainServiceIntent;
     private SharedPreferences sharedPreferences;
     private LocalBroadcastManager localBroadcastManager;
+    private NavOptions.Builder navBuilder;
     private Toolbar toolbar;
     private RecyclerView feedRecyclerView;
     private FloatingActionButton refreshAllFeedsFab;
@@ -66,6 +68,11 @@ public class FeedListFragment extends Fragment {
         handler = new Handler();
         mainServiceIntent = new Intent(context, MainService.class);
         sharedPreferences = context.getSharedPreferences("application_preferences", Context.MODE_PRIVATE);
+        navBuilder = new NavOptions.Builder();
+        navBuilder.setEnterAnim(R.anim.nav_default_enter_anim)
+                .setExitAnim(R.anim.nav_default_exit_anim)
+                .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
+                .setPopExitAnim(R.anim.nav_default_pop_exit_anim);
 
         toolbar = binding.fragmentFeedListToolbar;
         feedRecyclerView = binding.fragmentFeedListFeedRecyclerView;
@@ -75,7 +82,7 @@ public class FeedListFragment extends Fragment {
         toolbar.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.fragment_feed_list_action_create:  {
-                    Navigation.findNavController(view).navigate(R.id.action_feedListFragment_to_createFeedFragment);
+                    Navigation.findNavController(view).navigate(R.id.action_feedListFragment_to_createFeedFragment, null, navBuilder.build());
                     return true;
                 }
                 case R.id.fragment_feed_list_action_refresh:  {
@@ -91,7 +98,7 @@ public class FeedListFragment extends Fragment {
                     return true;
                 }
                 case R.id.fragment_feed_list_action_preferences:  {
-                    Navigation.findNavController(view).navigate(R.id.action_feedListFragment_to_preferencesFragment);
+                    Navigation.findNavController(view).navigate(R.id.action_feedListFragment_to_preferencesFragment, null, navBuilder.build());
                     return true;
                 }
                 default:

@@ -28,6 +28,10 @@ public class FeedRepository {
         return feedDao.selectAllSync();
     }
 
+    public Feed selectByIdSync(int id) {
+        return feedDao.selectByIdSync(id).get(0);
+    }
+
     public void insert(Feed feed) {
         new InsertAsyncTask(feedDao).execute(feed);
     }

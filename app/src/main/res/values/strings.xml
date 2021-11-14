@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">JSON Feed</string>
     <string name="create_new_feed">새 피드 생성</string>
+    <string name="edit_feed">피드 수정</string>
     <string name="refresh">새로고침</string>
     <string name="more">더보기</string>
     <string name="import_feeds">피드 가져오기</string>
@@ -14,7 +15,12 @@
     <string name="refresh_interval">새로고침 간격</string>
     <string name="seconds">초</string>
     <string name="create">생성하기</string>
+    <string name="edit">수정하기</string>
+    <string name="delete">삭제하기</string>
+    <string name="cancel">취소하기</string>
     <string name="preferences">환경설정</string>
     <string name="this_field_is_required">이 필드는 필수입니다.</string>
     <string name="only_numbers_are_allowed">숫자만 허용됩니다.</string>
+    <string name="are_you_sure">확실합니까?</string>
+    <string name="this_cannot_be_undone">이 작업은 되돌릴 수 없습니다.</string>
 </resources>

@@ -119,7 +119,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/fragment_create_feed_submit_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -20,6 +20,9 @@ public interface FeedDao {
     @Query("SELECT * FROM feeds")
     List<Feed> selectAllSync();
 
+    @Query("SELECT * FROM feeds WHERE id=:id")
+    List<Feed> selectByIdSync(int id);
+
     @Insert
     void insert(Feed feed);
 
