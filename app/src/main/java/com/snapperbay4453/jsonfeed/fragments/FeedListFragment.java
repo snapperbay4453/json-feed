@@ -96,7 +96,7 @@ public class FeedListFragment extends Fragment {
 
         refreshAllFeedsFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                mainServiceIntent.putExtra("command", "toggle");
+                mainServiceIntent.putExtra("command", "toggle_service_status");
                 context.startService(mainServiceIntent);
             }
         });

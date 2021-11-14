@@ -110,7 +110,7 @@ public class MainService extends Service {
         String command = intent.getExtras().getString("command");
         if (command.equals("initialize")) {
             initialize();
-        } else if (command.equals("toggle")) {
+        } else if (command.equals("toggle_service_status")) {
             toggle();
         } else {
             throw new UnsupportedOperationException("Not yet implemented");
