@@ -18,14 +18,13 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.snapperbay4453.jsonfeed.R;
 import com.snapperbay4453.jsonfeed.adapters.FeedListAdapter;
 import com.snapperbay4453.jsonfeed.databinding.FragmentFeedListBinding;
 import com.snapperbay4453.jsonfeed.models.Feed;
-import com.snapperbay4453.jsonfeed.services.BackgroundService;
+import com.snapperbay4453.jsonfeed.services.MainService;
 import com.snapperbay4453.jsonfeed.viewmodels.FeedViewModel;
 
 import java.util.List;
@@ -92,8 +91,8 @@ public class FeedListFragment extends Fragment {
 
         refreshAllFeedsFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Intent intent = new Intent(context, BackgroundService.class);
-                intent.putExtra("command", "toggle_background_service");
+                Intent intent = new Intent(context, MainService.class);
+                intent.putExtra("command", "toggle");
                 context.startService(intent);
             }
         });

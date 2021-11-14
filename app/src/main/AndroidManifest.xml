@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.snapperbay4453.jsonfeed">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,9 +12,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.JSONFeed">
         <service
-            android:name=".services.BackgroundService"
+            android:name=".services.FetcherService"
             android:enabled="true"
             android:exported="true"></service>
+        <service
+            android:name=".services.NotificationService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".services.MainService"
+            android:enabled="true"
+            android:exported="true" />
 
         <activity
             android:name=".activities.MainActivity"
