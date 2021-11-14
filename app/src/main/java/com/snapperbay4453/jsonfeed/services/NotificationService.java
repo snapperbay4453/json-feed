@@ -60,14 +60,14 @@ public class NotificationService extends Service {
             }
         }
         private void createNotification() {
-            Context backgroundServiceContext = NotificationService.this;
-            Intent mainIntent = new Intent(backgroundServiceContext, MainActivity.class);
-            mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            Context notificationServiceContext = NotificationService.this;
+            Intent mainActivityIntent = new Intent(notificationServiceContext, MainActivity.class);
+            mainActivityIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             PendingIntent pendingIntent = PendingIntent.getActivity(
-                    backgroundServiceContext, 0, mainIntent, 0
+                    notificationServiceContext, 0, mainActivityIntent, 0
             );
             NotificationCompat.Builder notificationBuilder;
-            notificationBuilder = new NotificationCompat.Builder(backgroundServiceContext, notificationChannelId);
+            notificationBuilder = new NotificationCompat.Builder(notificationServiceContext, notificationChannelId);
             notification = notificationBuilder
                     .setSmallIcon(android.R.drawable.btn_star)
                     .setContentTitle("JSON Feed")
@@ -76,7 +76,7 @@ public class NotificationService extends Service {
                     .build();
             notification.defaults = Notification.DEFAULT_SOUND;
             // notification.flags = Notification.FLAG_ONLY_ALERT_ONCE;
-            NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(backgroundServiceContext);
+            NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(notificationServiceContext);
             notificationManagerCompat.notify(notificationId, notification);
         }
         public void run() {

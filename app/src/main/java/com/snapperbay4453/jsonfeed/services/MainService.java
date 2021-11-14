@@ -9,12 +9,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.snapperbay4453.jsonfeed.activities.MainActivity;
 import com.snapperbay4453.jsonfeed.models.Feed;
@@ -47,27 +49,51 @@ public class MainService extends Service {
         }
     }
 
+    private void start() {
+        notificationServiceIntent.putExtra("command", "start");
+        fetcherServiceIntent.putExtra("command", "start");
+        startService(notificationServiceIntent);
+        startService(fetcherServiceIntent);
+    }
+
+    private void stop() {
+        notificationServiceIntent.putExtra("command", "stop");
+        fetcherServiceIntent.putExtra("command", "stop");
+        startService(notificationServiceIntent);
+        startService(fetcherServiceIntent);
+    }
+
     private void initialize() {
-        sharedPreferencesEditor.putBoolean("service_status", false);
-        sharedPreferencesEditor.commit();
-        handler.post(new ToastRunnable("Service initialized sharedPreferences."));
+        if (!sharedPreferences.contains("service_status")) {
+            sharedPreferencesEditor.putBoolean("service_status", false);
+            sharedPreferencesEditor.commit();
+            handler.post(new ToastRunnable("Service initialized sharedPreferences."));
+        }
+        if (sharedPreferences.getBoolean("service_status", false)) {
+            start();
+        }
+        broadcastServiceStatus();
     }
 
     private void toggle() {
         boolean serviceStatus = !sharedPreferences.getBoolean("service_status", false);
         sharedPreferencesEditor.putBoolean("service_status", serviceStatus);
         sharedPreferencesEditor.commit();
-        handler.post(new ToastRunnable(String.valueOf(serviceStatus)));
 
         if (serviceStatus) {
-            notificationServiceIntent.putExtra("command", "start");
-            fetcherServiceIntent.putExtra("command", "start");
+            start();
         } else {
-            notificationServiceIntent.putExtra("command", "stop");
-            fetcherServiceIntent.putExtra("command", "stop");
+            stop();
         }
-        startService(notificationServiceIntent);
-        startService(fetcherServiceIntent);
+        broadcastServiceStatus();
+    }
+
+    private void broadcastServiceStatus() {
+        Intent serviceStatusIntent = new Intent("service_status");
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("service_status", sharedPreferences.getBoolean("service_status", false));
+        serviceStatusIntent.putExtras(bundle);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(serviceStatusIntent);
     }
 
     @Override

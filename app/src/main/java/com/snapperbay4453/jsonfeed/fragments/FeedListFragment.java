@@ -1,14 +1,18 @@
 package com.snapperbay4453.jsonfeed.fragments;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,8 +41,9 @@ public class FeedListFragment extends Fragment {
     private FeedViewModel feedViewModel;
     private FeedListAdapter feedListAdapter;
     private Handler handler;
+    private Intent mainServiceIntent;
     private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor sharedPreferencesEditor;
+    private LocalBroadcastManager localBroadcastManager;
     private Toolbar toolbar;
     private RecyclerView feedRecyclerView;
     private FloatingActionButton refreshAllFeedsFab;
@@ -59,8 +64,8 @@ public class FeedListFragment extends Fragment {
         feedViewModel = new ViewModelProvider(this).get(FeedViewModel.class);
         feedListAdapter = new FeedListAdapter(feedViewModel);
         handler = new Handler();
-        sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-        sharedPreferencesEditor = sharedPreferences.edit();
+        mainServiceIntent = new Intent(context, MainService.class);
+        sharedPreferences = context.getSharedPreferences("application_preferences", Context.MODE_PRIVATE);
 
         toolbar = binding.fragmentFeedListToolbar;
         feedRecyclerView = binding.fragmentFeedListFeedRecyclerView;
@@ -91,9 +96,8 @@ public class FeedListFragment extends Fragment {
 
         refreshAllFeedsFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Intent intent = new Intent(context, MainService.class);
-                intent.putExtra("command", "toggle");
-                context.startService(intent);
+                mainServiceIntent.putExtra("command", "toggle");
+                context.startService(mainServiceIntent);
             }
         });
 
@@ -116,5 +120,37 @@ public class FeedListFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void setRefreshAllFeedsFab(boolean serviceStatus) {
+        if(serviceStatus){
+            refreshAllFeedsFab.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_baseline_pause_24));
+        } else {
+            refreshAllFeedsFab.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_baseline_play_arrow_24));
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        localBroadcastManager = LocalBroadcastManager.getInstance(context);
+        IntentFilter actionReceiver = new IntentFilter();
+        actionReceiver.addAction("service_status");
+        localBroadcastManager.registerReceiver(onServiceStatusReceived, actionReceiver);
+    }
+
+    private BroadcastReceiver onServiceStatusReceived = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null) {
+                setRefreshAllFeedsFab(intent.getBooleanExtra("service_status", false));
+            }
+        }
+    };
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        localBroadcastManager.unregisterReceiver(onServiceStatusReceived);
     }
 }

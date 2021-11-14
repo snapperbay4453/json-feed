@@ -58,20 +58,24 @@ public class FetcherService extends Service {
             String response = "";
             try {
                 URL url = new URL("https://random-data-api.com/api/address/random_address");
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                HttpURLConnection httpUrlConnection = (HttpURLConnection) url.openConnection();
 
-                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-                BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"), 8);
-                StringBuilder sb = new StringBuilder();
+                if (httpUrlConnection.getResponseCode() == 200) {
+                    InputStream in = new BufferedInputStream(httpUrlConnection.getInputStream());
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"), 8);
+                    StringBuilder stringBuilder = new StringBuilder();
 
-                String line = null;
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line + "\n");
+                    String line = null;
+                    while ((line = reader.readLine()) != null) {
+                        stringBuilder.append(line + "\n");
+                    }
+                    response = stringBuilder.toString();
+                } else {
+                    throw new Exception();
                 }
-                response = sb.toString();
-                System.out.println("result"+response);
-            } catch (Exception e){
-                System.out.println(" error"+e);
+            } catch (Exception exception){
+                System.out.println("Error: " + exception);
+                response = "데이터를 가져오는 중 오류가 발생했습니다.";
             }
             return response;
         }
