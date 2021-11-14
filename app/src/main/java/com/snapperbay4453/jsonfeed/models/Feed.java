@@ -19,22 +19,23 @@ public class Feed {
     @ColumnInfo(name = "url")
     private String url;
 
-    @ColumnInfo(name = "description")
-    private String description;
+    @ColumnInfo(name = "filter")
+    private String filter;
 
     @ColumnInfo(name = "timestamp")
     private long timestamp;
 
-    @ColumnInfo(name = "interval")
-    private int interval;
+    @ColumnInfo(name = "refresh_interval")
+    private int refreshInterval;
 
     @ColumnInfo(name = "data")
     private String data;
 
-    public Feed(@NonNull String name, @NonNull String url, String description) {
+    public Feed(@NonNull String name, @NonNull String url, @NonNull String filter, @NonNull int refreshInterval) {
         this.name = name;
         this.url = url;
-        this.description = description;
+        this.filter = filter;
+        this.refreshInterval = refreshInterval;
     }
 
     public int getId() {
@@ -58,11 +59,11 @@ public class Feed {
         this.url = url;
     }
 
-    public String getDescription() {
-        return description;
+    public String getFilter() {
+        return filter;
     }
-    public void setDescription(String description) {
-        this.description = description;
+    public void setFilter(String filter) {
+        this.filter = filter;
     }
 
     public long getTimestamp() {
@@ -72,11 +73,11 @@ public class Feed {
         this.timestamp = timestamp;
     }
 
-    public int getInterval() {
-        return interval;
+    public int getRefreshInterval() {
+        return refreshInterval;
     }
-    public void setInterval(int interval) {
-        this.interval = interval;
+    public void setRefreshInterval(int refreshInterval) {
+        this.refreshInterval = refreshInterval;
     }
 
     public String getData() {
@@ -84,16 +85,6 @@ public class Feed {
     }
     public void setData(String data) {
         this.data = data;
-    }
-
-    @Override
-    public String toString(){
-        return "Feed{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", url='" + url + '\'' +
-                ", description='" + description + '\'' +
-                '}';
     }
 
     public static DiffUtil.ItemCallback<Feed> DIFF_CALLBACK = new  DiffUtil.ItemCallback<Feed>() {
@@ -114,10 +105,9 @@ public class Feed {
         Feed feed = (Feed) obj;
         return feed.id == this.id
                 && feed.url == this.url
-                && feed.description == this.description
+                && feed.filter == this.filter
                 && feed.timestamp == this.timestamp
-                && feed.interval == this.interval
+                && feed.refreshInterval == this.refreshInterval
                 && feed.data == this.data;
     }
-
 }

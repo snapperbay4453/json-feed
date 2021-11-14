@@ -24,13 +24,18 @@
         <menu>
 
             <item
-                android:id="@+id/fragment_feed_list_action_preferences"
-                android:title="@string/preferences"
+                android:id="@+id/fragment_feed_list_action_import"
+                android:title="@string/import_feeds"
                 app:showAsAction="ifRoom|withText"/>
 
             <item
                 android:id="@+id/fragment_feed_list_action_nuke"
                 android:title="@string/delete_all_feeds"
+                app:showAsAction="ifRoom|withText"/>
+
+            <item
+                android:id="@+id/fragment_feed_list_action_preferences"
+                android:title="@string/preferences"
                 app:showAsAction="ifRoom|withText"/>
 
         </menu>

@@ -57,4 +57,7 @@ dependencies {
     def retrofit2_version = "2.6.0"
     implementation "com.squareup.retrofit2:retrofit:$retrofit2_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit2_version"
+
+    def json_path_version = "2.4.0"
+    implementation "com.jayway.jsonpath:json-path:$json_path_version"
 }

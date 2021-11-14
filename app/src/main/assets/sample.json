@@ -1,0 +1,20 @@
+[
+  {
+    "name": "TimeAPI",
+    "url": "https://www.timeapi.io/api/Time/current/zone?timeZone=Asia/Seoul",
+    "filter": "",
+    "refresh_interval": 1
+  },
+  {
+    "name": "RandomDataAPI - Address",
+    "url": "https://random-data-api.com/api/address/random_address",
+    "filter": "",
+    "refresh_interval": 2
+  },
+  {
+    "name": "CoinCap API 2.0 - BitCoin",
+    "url": "https://api.coincap.io/v2/assets/bitcoin",
+    "filter": "",
+    "refresh_interval": 5
+  }
+]

@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.jayway.jsonpath.JsonPath;
 import com.snapperbay4453.jsonfeed.activities.MainActivity;
 import com.snapperbay4453.jsonfeed.models.Feed;
 import com.snapperbay4453.jsonfeed.repositories.FeedRepository;
@@ -54,38 +55,46 @@ public class FetcherService extends Service {
                 this.isRun = false;
             }
         }
-        public String fetch() {
-            String response = "";
-            try {
-                URL url = new URL("https://random-data-api.com/api/address/random_address");
-                HttpURLConnection httpUrlConnection = (HttpURLConnection) url.openConnection();
+        public String fetch(String urlString) throws Exception {
+        String response = "";
+            URL url = new URL(urlString);
+            HttpURLConnection httpUrlConnection = (HttpURLConnection) url.openConnection();
 
-                if (httpUrlConnection.getResponseCode() == 200) {
-                    InputStream in = new BufferedInputStream(httpUrlConnection.getInputStream());
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"), 8);
-                    StringBuilder stringBuilder = new StringBuilder();
+            if (httpUrlConnection.getResponseCode() == 200) {
+                InputStream in = new BufferedInputStream(httpUrlConnection.getInputStream());
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"), 8);
+                StringBuilder stringBuilder = new StringBuilder();
 
-                    String line = null;
-                    while ((line = reader.readLine()) != null) {
-                        stringBuilder.append(line + "\n");
-                    }
-                    response = stringBuilder.toString();
-                } else {
-                    throw new Exception();
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    stringBuilder.append(line + "\n");
                 }
-            } catch (Exception exception){
-                System.out.println("Error: " + exception);
-                response = "데이터를 가져오는 중 오류가 발생했습니다.";
+                response = stringBuilder.toString();
+            } else {
+                throw new Exception("데이터를 가져오는 중 오류가 발생했습니다.");
             }
             return response;
         }
+        private String filter(String jsonString, String filter) throws Exception {
+            if ((filter == null) || (filter.equals(""))) { return jsonString; }
+            else {
+                String filteredString = JsonPath.parse(jsonString).read(filter).toString();
+                return filteredString;
+            }
+        }
         public void run() {
             while (isRun) {
-                feed.setData(fetch());
-                feedRepository.update(feed);
                 try {
-                    Thread.sleep( 1000 );
-                } catch (Exception e) {}
+                    String jsonString = fetch(feed.getUrl());
+                    feed.setData(filter(jsonString, feed.getFilter()));
+                } catch (Exception exception) {
+                    feed.setData(exception.getMessage());
+                } finally {
+                    feedRepository.update(feed);
+                }
+                try {
+                    Thread.sleep( feed.getRefreshInterval() * 1000 );
+                } catch (Exception exception) {}
             }
         }
     }

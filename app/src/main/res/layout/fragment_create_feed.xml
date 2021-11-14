@@ -33,23 +33,39 @@
                     android:layout_height="wrap_content"
                     android:text="@string/essential_information"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/fragment_create_feed_name_input" >
+                    app:layout_constraintBottom_toTopOf="@+id/fragment_create_feed_name_input_wrap" >
                 </TextView>
 
-                <EditText
-                    android:id="@+id/fragment_create_feed_name_input"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fragment_create_feed_name_input_wrap"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@+id/fragment_create_feed_essential_group_title"
-                    app:layout_constraintBottom_toTopOf="@+id/fragment_create_feed_url_input"
-                    android:hint="@string/name"/>
+                    app:layout_constraintBottom_toTopOf="@+id/fragment_create_feed_url_input_wrap">
 
-                <EditText
-                    android:id="@+id/fragment_create_feed_url_input"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/fragment_create_feed_name_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/name"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fragment_create_feed_url_input_wrap"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@+id/fragment_create_feed_name_input"
-                    android:hint="@string/url"/>
+                    app:layout_constraintTop_toBottomOf="@+id/fragment_create_feed_name_input_wrap">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/fragment_create_feed_url_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/url"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -66,15 +82,40 @@
                 android:layout_height="wrap_content"
                 android:text="@string/additional_information"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/fragment_create_feed_description_input" >
+                app:layout_constraintBottom_toTopOf="@+id/fragment_create_feed_filter_input_wrap" >
             </TextView>
 
-            <EditText
-                android:id="@+id/fragment_create_feed_description_input"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/fragment_create_feed_filter_input_wrap"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/fragment_create_feed_additional_group_title"
-                android:hint="@string/description" />
+                app:layout_constraintBottom_toTopOf="@+id/fragment_create_feed_refresh_interval_input_wrap">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/fragment_create_feed_filter_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/filter"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/fragment_create_feed_refresh_interval_input_wrap"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_create_feed_filter_input_wrap"
+                app:suffixText="@string/seconds">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/fragment_create_feed_refresh_interval_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/refresh_interval"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

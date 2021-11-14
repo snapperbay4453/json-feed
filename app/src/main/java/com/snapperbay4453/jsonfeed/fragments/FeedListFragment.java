@@ -81,6 +81,11 @@ public class FeedListFragment extends Fragment {
                 case R.id.fragment_feed_list_action_refresh:  {
                     return true;
                 }
+                case R.id.fragment_feed_list_action_import: {
+                    mainServiceIntent.putExtra("command", "import_feeds");
+                    context.startService(mainServiceIntent);
+                    return true;
+                }
                 case R.id.fragment_feed_list_action_nuke: {
                     feedViewModel.deleteAll();
                     return true;

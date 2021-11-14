@@ -18,10 +18,19 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.internal.Utils;
 import com.snapperbay4453.jsonfeed.activities.MainActivity;
 import com.snapperbay4453.jsonfeed.models.Feed;
 import com.snapperbay4453.jsonfeed.repositories.FeedRepository;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +39,7 @@ public class MainService extends Service {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor sharedPreferencesEditor;
     private Handler handler;
+    private FeedRepository feedRepository;
     private Intent notificationServiceIntent;
     private Intent fetcherServiceIntent;
 
@@ -88,6 +98,43 @@ public class MainService extends Service {
         broadcastServiceStatus();
     }
 
+    private String getJsonFromAssets(Context context, String fileName) {
+        String json;
+        try {
+            InputStream is = context.getAssets().open(fileName);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+    }
+
+    private void importFeeds() {
+        try {
+            JSONArray jsonArray = new JSONArray(getJsonFromAssets(getApplicationContext(), "sample.json"));
+            List<Feed> feedList = new ArrayList<>();
+            for (int index = 0; index < jsonArray.length(); index++) {
+                feedList.add(new Feed(
+                        jsonArray.getJSONObject(index).getString("name"),
+                        jsonArray.getJSONObject(index).getString("url"),
+                        jsonArray.getJSONObject(index).getString("filter"),
+                        Integer.parseInt(jsonArray.getJSONObject(index).getString("refresh_interval"))
+                ));
+            }
+            feedRepository.deleteAll();
+            for (int index = 0; index < feedList.size(); index++) {
+                feedRepository.insert(feedList.get(index));
+            }
+        } catch(JSONException exception) {
+            exception.printStackTrace();
+        }
+    }
+
     private void broadcastServiceStatus() {
         Intent serviceStatusIntent = new Intent("service_status");
         Bundle bundle = new Bundle();
@@ -101,6 +148,7 @@ public class MainService extends Service {
         sharedPreferences = getApplicationContext().getSharedPreferences("application_preferences", Context.MODE_PRIVATE);
         sharedPreferencesEditor = sharedPreferences.edit();
         handler = new Handler();
+        feedRepository = new FeedRepository(getApplication());
         notificationServiceIntent = new Intent(this, NotificationService.class);
         fetcherServiceIntent = new Intent(this, FetcherService.class);
     }
@@ -112,6 +160,8 @@ public class MainService extends Service {
             initialize();
         } else if (command.equals("toggle_service_status")) {
             toggle();
+        } else if (command.equals("import_feeds")) {
+            importFeeds();
         } else {
             throw new UnsupportedOperationException("Not yet implemented");
         }
